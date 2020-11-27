@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+	<property name="MSG_FORMAT" value="%d{yyyy-MM-dd HH:mm:ss} [%-5p] [%t] [%X{traceId},%X{spanId}] [%F::%M\\(%L\\)] : %m%n"/>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>${MSG_FORMAT}</pattern>
+		</layout>
+	</appender>
+
+	<property name="COLOR_MSG_FORMAT" 
+	         value="%clr(%d{yyyy-MM-dd HH:mm:ss}){faint} %clr([%-5p]) %clr([%X{traceId},%X{spanId}]){magenta} %clr([%30.-30F::%-20.20M\\(%4L\\)]){cyan} %clr(:){faint} %m%n"/>
+	         
+	<appender name="COLOR_STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>${COLOR_MSG_FORMAT}</pattern>
+		</layout>
+	</appender>
+	
+	<springProfile name="local">
+		<property name="LOG_DIR" value="C:/WORK/logs" />
+	</springProfile>
+	<springProfile name="dev, tst, stg, prd">
+		<property name="LOG_DIR" value="/logs" />
+	</springProfile>
+
+	<property name="LOG_PATH_NAME" value="${LOG_DIR}/demo-msa.log" />
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_PATH_NAME}</file>
+		<!-- logging by date rolling -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_PATH_NAME}.%d{yyyyMMdd}</fileNamePattern>
+			<maxHistory>60</maxHistory> <!-- 일자별 백업파일의 보관기간 -->
+		</rollingPolicy>
+		<encoder>
+			<pattern>${MSG_FORMAT}</pattern>
+		</encoder>
+	</appender>
+
+	<springProfile name="local">
+		<logger name="com.hbyoon" additivity="false" level='debug'>
+			<appender-ref ref="COLOR_STDOUT" /><appender-ref ref="FILE" />
+		</logger>
+		<root level="info">
+			<appender-ref ref="COLOR_STDOUT" /><appender-ref ref="FILE" />
+		</root>
+	</springProfile>
+
+	<springProfile name="dev, tst, stg">
+		<logger name="com.hbyoon" additivity="false" level='debug'>
+			<appender-ref ref="STDOUT" /><appender-ref ref="FILE" />
+		</logger>
+		<root level="info">
+			<appender-ref ref="STDOUT" /><appender-ref ref="FILE" />
+		</root>
+	</springProfile>
+
+	<springProfile name="prd">
+		<logger name="com.hbyoon" additivity="false" level='info'>
+			<appender-ref ref="STDOUT" /><appender-ref ref="FILE" />
+		</logger>
+		<root level="info">
+			<appender-ref ref="STDOUT" /><appender-ref ref="FILE" />
+		</root>
+	</springProfile>
+
+</configuration>

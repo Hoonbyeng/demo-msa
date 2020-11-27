@@ -1,0 +1,58 @@
+#
+# Global setting
+# global 설정은 기본 설정이고, 각 프로파일에서 동일한 변수에 재설정할 수 있다.
+###########################################
+logging:  config: classpath:logback-api.xml
+ 
+spring:
+  profiles:    active:    - local
+
+  jackson:    locale: ko_KR
+    time-zone: Asia/Seoul
+    date-format: yyyyMMddHHmmss
+
+---
+#
+# LOCAL Setting
+###########################################
+spring:
+  profiles:  - local
+
+  zipkin:
+    enabled: false
+  sleuth:
+    trace-id128: true
+    sampler:
+      probability: 0
+
+server:
+  port: 9090
+
+demo:
+  api:
+    msa: http://localhost:9090/msa
+    msb: http://localhost:9091/msb
+
+---
+#
+# DEV Setting
+###########################################
+spring:
+  profiles:
+  - dev
+
+  zipkin:
+    base-url: http://zipkin.istio-system:9411/
+  sleuth:
+    trace-id128: true
+    sampler:
+      probability: 1
+
+server:
+  port: 8080
+
+demo:
+  api:
+    msa: http://demo-msa:8080/msa
+    msb: http://demo-msb:8080/msb
+
