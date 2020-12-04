@@ -53,6 +53,6 @@ server:
 
 demo:
   api:
-    msa: http://demo-msa:8080/msa
-    msb: http://demo-msb:8080/msb
+    msa: http://demo-msa-svc:8080/msa
+    msb: http://demo-msb-svc:8080/msb
 
