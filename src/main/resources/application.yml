@@ -3,8 +3,14 @@
 # global 설정은 기본 설정이고, 각 프로파일에서 동일한 변수에 재설정할 수 있다.
 ###########################################
 logging:  config: classpath:logback-api.xml
- 
+
+project:
+  name: '@project.name@'
+  version: '@project.version@'
+
 spring:
+  version: '@project.parent.version@'
+
   profiles:    active:    - local
 
   jackson:    locale: ko_KR
