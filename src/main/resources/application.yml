@@ -59,6 +59,5 @@ server:
 
 demo:
   api:
-    msa: http://demo-msa-svc:8080/msa
-    msb: http://demo-msb-svc:8080/msb
-
+    msa: http://www.ensmart.tk/msa
+    msb: http://www.ensmart.tk/msb
